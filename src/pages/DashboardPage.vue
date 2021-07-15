@@ -26,9 +26,7 @@
     </div>
   </template>
   <template v-else>
-    <div style="width: 100%" class="column justify-center items-center q-mt-lg">
-      <q-spinner-cube size="100px" />
-    </div>
+    <page-loading-spinner />
   </template>
 </template>
 
@@ -36,8 +34,10 @@
 import { defineComponent } from 'vue';
 import { mdiMagnify, mdiChatQuestion } from '@quasar/extras/mdi-v5';
 import { account, isLoggedIn } from 'src/state';
+import PageLoadingSpinner from 'src/components/PageLoadingSpinner.vue';
 
 export default defineComponent({
+  components: { PageLoadingSpinner },
   setup() {
     return {
       mdiMagnify,

@@ -4,7 +4,7 @@
     <div>{{ content }}</div>
   </template>
   <template v-else>
-    <q-spinner-cube />
+    <page-loading-spinner />
   </template>
 </template>
 
@@ -12,6 +12,7 @@
 import { defineComponent, ref, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from 'src/utils';
+import PageLoadingSpinner from 'components/PageLoadingSpinner.vue';
 
 type Question = {
   id: number;
@@ -22,6 +23,7 @@ type Question = {
 };
 
 export default defineComponent({
+  components: { PageLoadingSpinner },
   props: {
     question: {
       type: String,
