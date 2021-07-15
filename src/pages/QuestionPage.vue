@@ -2,7 +2,6 @@
   <template v-if="isQuestionLoaded">
     <div class="text-h3">{{ question }}</div>
     <div>{{ content }}</div>
-
     <q-editor v-model="editor"></q-editor>
     <q-btn label="Post" class="q-mt-md self-center" @click="answerQuestion" />
     <error-message class="q-mt-sm" :message="errorMessage" />
@@ -14,10 +13,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { api } from 'src/utils';
-import { Question } from 'src/state';
+import { Question, account } from 'src/state';
 import PageLoadingSpinner from 'components/PageLoadingSpinner.vue';
+import { Notify } from 'quasar';
 
 export default defineComponent({
   components: { PageLoadingSpinner },
@@ -39,32 +39,56 @@ export default defineComponent({
     const route = useRoute();
     const editor = ref('');
     const errorMessage = ref('');
+    const answererName = ref('');
 
     const question = reactive<Question>({} as Question);
     const isQuestionLoaded = ref(false);
 
+    const router = useRouter();
+    const questionId = route.params.id?.toString();
+
     async function fetchQuestion() {
-      const response = await api.get(`questions/${route.params.id.toString()}`);
-      const result = (await response.json()) as Question;
-      Object.entries(result).forEach(([key, value]) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        question[key] = value;
+      try {
+        const response = await api.get(`questions/${questionId}`);
+        const result = (await response.json()) as Question;
+        Object.entries(result).forEach(([key, value]) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          question[key] = value;
+        });
+      } catch (e) {
+        Notify.create({
+          message: `Could not load question ${route.params.id.toString()}`,
+          type: 'negative',
+        });
+        await router.replace('/questions');
+      }
+    }
+
+    if (questionId == null) {
+      void router.replace('/questions');
+    } else {
+      void fetchQuestion().then(() => {
+        isQuestionLoaded.value = true;
       });
     }
 
-    void fetchQuestion().then(() => {
-      isQuestionLoaded.value = true;
-    });
-
     async function answerQuestion() {
-      await api.get(``)
+      await api.post('answer', {
+        json: {
+          id: questionId,
+          content: editor.value,
+          role: account.role,
+          authorName: answererName.value,
+        },
+      });
     }
 
     return {
       isQuestionLoaded,
       editor,
       errorMessage,
+      answererName,
       answerQuestion,
     };
   },

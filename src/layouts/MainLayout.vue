@@ -21,7 +21,7 @@
                 v-else
                 :name="mdiClose"
                 class="cursor-pointer"
-                @click="text = ''"
+                @click="searchText = ''"
               />
             </template>
           </q-input>
@@ -29,11 +29,12 @@
             v-if="searchText !== ''"
             style="
               position: absolute;
-              left: 10px;
+              left: 5px;
               background-color: white;
               border: 1px solid black;
               border-radius: 5px;
               z-index: 999;
+              width: calc(100% - 10px);
             "
           >
             <questions-list @click="searchText = ''" :filter="searchText" />
