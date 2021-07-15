@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { api } from 'src/utils';
-import { isLoggedIn } from 'src/state';
+import { isLoggedIn, questions } from 'src/state';
 import PageLoadingSpinner from 'src/components/PageLoadingSpinner.vue';
 
 export default defineComponent({
@@ -36,7 +36,13 @@ export default defineComponent({
     const question = ref('');
 
     async function postQuestion() {
-      console.log(editor.value);
+      questions.push({
+        id: questions.length + 1,
+        question: question.value,
+        content: editor.value,
+        role: 'patient',
+      });
+
       await api.post('question', {
         json: {
           question: question.value,

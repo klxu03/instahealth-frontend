@@ -16,9 +16,9 @@
             <q-item-label>
               {{ question.question }}
             </q-item-label>
-            <q-item-label caption lines="3">{{
-              question.content
-            }}</q-item-label>
+            <q-item-label caption lines="3">
+              {{ question.content }}
+            </q-item-label>
           </q-item-section>
 
           <q-item-section side>
@@ -43,33 +43,8 @@ import {
   mdiHospitalBox,
   mdiChevronRight,
 } from '@quasar/extras/mdi-v5';
-
-const questions = [
-  {
-    id: 1,
-    question: 'Mild occasional lightheadedness',
-    content: 'I have mild occasional lightheadedness',
-    role: 'patient',
-  },
-  {
-    id: 2,
-    question: 'Severe weight loss',
-    content: 'I have severe weight loss',
-    role: 'patient',
-  },
-  {
-    id: 3,
-    question: 'Mild ringing in the ears',
-    content: 'I have mild ringing in the ears',
-    role: 'patient',
-  },
-  {
-    id: 4,
-    question: 'Critical shortness of breath',
-    content: 'I have critical shortness of breath',
-    role: 'patient',
-  },
-];
+import { questions } from 'src/state';
+import ky from 'ky';
 
 const roleToIconMap = {
   patient: mdiHelp,
@@ -87,6 +62,12 @@ export default defineComponent({
     function getIconForRole(role: string) {
       return roleToIconMap[role as keyof typeof roleToIconMap];
     }
+
+    async function fetchQuestions() {
+      await ky.get('questions');
+    }
+
+    void fetchQuestions();
 
     return {
       questions,
