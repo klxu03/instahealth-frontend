@@ -1,26 +1,32 @@
 <template>
   <q-page class="column items-center">
     <div class="text-h3 text-bold q-mt-md">Recent Questions</div>
-    <q-list class="column items-stretch" style="width: 100%">
-      <q-item
-        :to="`/question/${question.id}`"
-        v-for="question in questions"
-        :key="question.id"
-        class="q-pa-md"
-        style="max-width: 600px; margin-left: auto; margin-right: auto"
-      >
-        <q-item-section top avatar>
-          <q-icon :name="getIconForRole(question.role)" />
-        </q-item-section>
+    <q-list class="column items-stretch" style="width: 600px">
+      <template v-for="question in questions" :key="question.id">
+        <q-item
+          :to="`/question/${question.id}`"
+          class="q-pa-md"
+          style="width: 600px; margin-left: auto; margin-right: auto"
+        >
+          <q-item-section top avatar>
+            <q-icon :name="getIconForRole(question.role)" />
+          </q-item-section>
 
-        <q-item-section>
-          <q-item-label>
-            {{ question.question }}
-          </q-item-label>
-          <q-item-label caption lines="3">{{ question.content }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-separator />
+          <q-item-section>
+            <q-item-label>
+              {{ question.question }}
+            </q-item-label>
+            <q-item-label caption lines="3">{{
+              question.content
+            }}</q-item-label>
+          </q-item-section>
+
+          <q-item-section side>
+            <q-icon :name="mdiChevronRight" />
+          </q-item-section>
+        </q-item>
+        <q-separator />
+      </template>
     </q-list>
   </q-page>
 </template>
@@ -35,14 +41,32 @@ import {
   mdiTooth,
   mdiEarHearing,
   mdiHospitalBox,
+  mdiChevronRight,
 } from '@quasar/extras/mdi-v5';
 
 const questions = [
   {
     id: 1,
-    question: 'Why is there a ring on my arm?',
-    content:
-      'I have this ring on my arm, and I would like to know if it should be a concern or not. I have this ring on my arm, and I would like to know if it should be a concern or not. I have this ring on my arm, and I would like to know if it should be a concern or not.',
+    question: 'Mild occasional lightheadedness',
+    content: 'I have mild occasional lightheadedness',
+    role: 'patient',
+  },
+  {
+    id: 2,
+    question: 'Severe weight loss',
+    content: 'I have severe weight loss',
+    role: 'patient',
+  },
+  {
+    id: 3,
+    question: 'Mild ringing in the ears',
+    content: 'I have mild ringing in the ears',
+    role: 'patient',
+  },
+  {
+    id: 4,
+    question: 'Critical shortness of breath',
+    content: 'I have critical shortness of breath',
     role: 'patient',
   },
 ];
@@ -67,6 +91,7 @@ export default defineComponent({
     return {
       questions,
       getIconForRole,
+      mdiChevronRight,
     };
   },
 });
