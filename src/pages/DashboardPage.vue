@@ -8,7 +8,7 @@
       <div class="column items-center q-gutter-y-sm">
         <q-btn
           :icon="mdiMagnify"
-          label="Search Questions"
+          label="Recent Questions"
           to="/questions"
           no-caps
         />

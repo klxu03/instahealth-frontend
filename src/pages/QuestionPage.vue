@@ -15,15 +15,19 @@
           }}
         </div>
       </div>
-      <div class="q-mb-xs">{{ question.content }}</div>
+      <div class="q-mb-xs" v-html="question.content" />
       <q-separator />
 
       <template v-for="answer in question.answers" :key="answer.id">
-        <div class="row q-py-sm">
+        <div class="row q-py-sm items-center">
           <div class="text-bold q-mr-xs">
             {{ answer.authorName }} ({{ formatRole(answer.role) }}):
           </div>
-          <div>{{ answer.content }}</div>
+          <div v-html="answer.content" />
+          <q-space />
+          <q-btn :icon="mdiCash" round color="green" dense @click="tipDoctor">
+            <q-tooltip>Tip the doctor who answered the question!</q-tooltip>
+          </q-btn>
         </div>
         <q-separator />
       </template>
@@ -73,6 +77,7 @@ import PageLoadingSpinner from 'components/PageLoadingSpinner.vue';
 import { Notify } from 'quasar';
 import ErrorMessage from 'components/ErrorMessage.vue';
 import { HTTPError } from 'ky';
+import { mdiCash } from '@quasar/extras/mdi-v5';
 
 export default defineComponent({
   components: { PageLoadingSpinner, ErrorMessage },
@@ -145,6 +150,10 @@ export default defineComponent({
       }
     }
 
+    function tipDoctor() {
+      alert("Sorry, but this functionality hasn't been implemented yet.");
+    }
+
     return {
       isQuestionLoaded,
       editor,
@@ -155,6 +164,8 @@ export default defineComponent({
       question,
       formatRole,
       account,
+      mdiCash,
+      tipDoctor,
     };
   },
 });

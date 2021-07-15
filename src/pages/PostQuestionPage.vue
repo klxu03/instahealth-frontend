@@ -39,6 +39,7 @@ import { defineComponent, ref } from 'vue';
 import ErrorMessage from 'components/ErrorMessage.vue';
 import { HTTPError } from 'ky';
 import { Notify } from 'quasar';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   components: { PageLoadingSpinner, ErrorMessage },
@@ -47,6 +48,8 @@ export default defineComponent({
     const editor = ref('');
     const question = ref('');
     const errorMessage = ref('');
+
+    const router = useRouter();
 
     async function postQuestion() {
       try {
@@ -76,6 +79,8 @@ export default defineComponent({
           categories: [],
           answers: [],
         });
+
+        await router.push('/questions');
       } catch (e: unknown) {
         errorMessage.value =
           (await (e as HTTPError).response?.text()) ?? (e as Error).toString();
