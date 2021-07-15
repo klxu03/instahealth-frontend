@@ -1,14 +1,19 @@
 <template>
   <q-list
     class="column items-center text-black"
-    style='width: 100%'
+    style="width: 100%"
     v-if="filteredQuestions.length > 0"
   >
     <template v-for="question in filteredQuestions" :key="question.id">
       <q-item
         :to="`/question/${question.id}`"
         class="q-pa-md self-stretch"
-        style="max-width: 600px; width: 100%; margin-left: auto; margin-right: auto"
+        style="
+          max-width: 600px;
+          width: 100%;
+          margin-left: auto;
+          margin-right: auto;
+        "
       >
         <q-item-section top avatar>
           <q-icon :name="getIconForRole(question.role)" />

@@ -5,18 +5,19 @@ export type Account = {
   role: string;
 };
 
-export type Question = {
-  id: number;
-  question: string;
-  content: string;
-  role: string;
-};
-
 export type Answer = {
   id: number;
   content: string;
   role: string;
   authorName: string;
+};
+
+export type Question = {
+  id: number;
+  question: string;
+  content: string;
+  role: string;
+  answers: Answer[];
 };
 
 export const account = reactive<Account>({} as Account);

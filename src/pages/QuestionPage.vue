@@ -1,6 +1,6 @@
 <template>
   <template v-if="isQuestionLoaded">
-    <q-card class="q-ma-md q-pa-md">
+    <q-card class="q-ma-md q-pa-md items-stretch column">
       <div class="row">
         <div class="text-h6 text-bold q-mr-sm">Question:</div>
         <div class="text-h6">{{ question.question }}</div>
@@ -8,7 +8,7 @@
       <div class="q-mb-xs">{{ question.content }}</div>
       <q-separator />
       <template v-if="isLoggedIn === true">
-        <div class="text-center text-h6 text-bold">Post an Answer:</div>
+        <div class="text-center text-h6 text-bold q-mt-md">Post an Answer:</div>
         <q-editor v-model="editor"></q-editor>
         <q-btn
           label="Post"
@@ -31,10 +31,11 @@
 import { defineComponent, ref, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { api } from 'src/utils';
-import { Question, account, isLoggedIn } from 'src/state';
+import { Question, account, isLoggedIn, questions } from 'src/state';
 import PageLoadingSpinner from 'components/PageLoadingSpinner.vue';
 import { Notify } from 'quasar';
 import ErrorMessage from 'components/ErrorMessage.vue';
+import { HTTPError } from 'ky';
 
 export default defineComponent({
   components: { PageLoadingSpinner, ErrorMessage },
@@ -77,14 +78,39 @@ export default defineComponent({
     }
 
     async function answerQuestion() {
-      await api.post('answer', {
-        json: {
-          id: questionId,
-          content: editor.value,
-          role: account.role,
-          authorName: answererName.value,
-        },
-      });
+      try {
+        const response = await api.post('answer', {
+          json: {
+            id: questionId,
+            content: editor.value,
+            role: account.role,
+            authorName: answererName.value,
+          },
+        });
+
+        const result = (await response.json()) as { id: number };
+
+        const question = questions.find(
+          (question) => question.id.toString() === questionId
+        );
+
+        if (question !== undefined) {
+          question.answers.push({
+            id: result.id,
+            content: editor.value,
+            role: account.role,
+            authorName: answererName.value,
+          });
+        }
+
+        Notify.create({
+          message: 'Successfully posted your answer!',
+          type: 'positive',
+        });
+      } catch (e: unknown) {
+        errorMessage.value =
+          (await (e as HTTPError).response?.text()) ?? (e as Error).toString();
+      }
     }
 
     return {

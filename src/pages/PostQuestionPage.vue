@@ -73,6 +73,7 @@ export default defineComponent({
           question: question.value,
           content: editor.value,
           role: 'patient',
+          answers: [],
         });
       } catch (e: unknown) {
         errorMessage.value =
