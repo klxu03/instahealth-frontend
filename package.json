@@ -6,12 +6,15 @@
   "author": "Leon Si <leonzalion@gmail.com>",
   "private": true,
   "scripts": {
+    "dev": "quasar dev",
     "lint": "eslint --ext .js,.ts,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
+    "dotenv": "^10.0.0",
+    "ky": "^0.28.5",
     "quasar": "^2.0.0"
   },
   "devDependencies": {
