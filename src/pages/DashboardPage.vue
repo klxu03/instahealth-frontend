@@ -2,8 +2,10 @@
   <template v-if="isLoggedIn === true">
     <div class="row justify-around q-pa-lg">
       <div class="column">
-        <div class="text-h4 text-bold text-center q-mb-sm">My Questions</div>
-        <questions-list my-questions />
+        <div class="text-h4 text-bold text-center q-mb-sm">
+          Recent Questions
+        </div>
+        <questions-list />
       </div>
       <div class="column items-center q-gutter-y-sm">
         <q-btn
@@ -38,10 +40,13 @@ import { account, isLoggedIn } from 'src/state';
 import PageLoadingSpinner from 'src/components/PageLoadingSpinner.vue';
 import { questions } from 'src/state';
 import QuestionsList from 'src/components/QuestionsList.vue';
+import { fetchQuestions } from 'src/utils';
 
 export default defineComponent({
   components: { PageLoadingSpinner, QuestionsList },
   setup() {
+    void fetchQuestions();
+
     const myQuestions = computed(() => {
       const questionsArr = [];
       for (const question of questions) {
