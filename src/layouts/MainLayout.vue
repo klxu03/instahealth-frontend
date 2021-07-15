@@ -67,7 +67,7 @@ const links = [
     icon: mdiForum,
   },
   {
-    title: 'Post Question',
+    title: 'Post a Question',
     route: '/post',
     icon: mdiCommentQuestion,
   },
