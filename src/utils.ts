@@ -1,6 +1,7 @@
 import delay from 'delay';
 import ky from 'ky';
 import { account, Account, Question, questions } from './state';
+import capitalize from 'lodash.capitalize';
 
 console.log(`Server URL: ${process.env.SERVER_URL!}`);
 
@@ -24,5 +25,13 @@ export async function fetchQuestions() {
   questions.splice(0, questions.length);
   for (const question of result) {
     questions.push(question);
+  }
+}
+
+export function formatRole(role: string) {
+  if (role === 'familyDoctor') {
+    return 'Family Doctor';
+  } else {
+    return capitalize(role);
   }
 }

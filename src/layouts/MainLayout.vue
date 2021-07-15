@@ -91,9 +91,9 @@ import {
 } from '@quasar/extras/mdi-v5';
 import EssentialLink from 'components/EssentialLink.vue';
 
-import { isLoggedIn, questions, Question } from 'src/state';
+import { isLoggedIn } from 'src/state';
 import { useRouter } from 'vue-router';
-import { api, fetchAccount, fetchQuestions } from 'src/utils';
+import { fetchAccount, fetchQuestions } from 'src/utils';
 import QuestionsList from 'src/components/QuestionsList.vue';
 
 const links = [

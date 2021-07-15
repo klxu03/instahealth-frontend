@@ -17,6 +17,7 @@ export type Question = {
   question: string;
   content: string;
   role: string;
+  categories: string[];
   answers: Answer[];
 };
 

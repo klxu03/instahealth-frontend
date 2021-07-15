@@ -73,6 +73,7 @@ export default defineComponent({
           question: question.value,
           content: editor.value,
           role: 'patient',
+          categories: [],
           answers: [],
         });
       } catch (e: unknown) {

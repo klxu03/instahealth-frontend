@@ -5,22 +5,54 @@
         <div class="text-h6 text-bold q-mr-sm">Question:</div>
         <div class="text-h6">{{ question.question }}</div>
       </div>
+      <div class="row">
+        <div class="text-bold q-mr-xs q-mb-xs">Categories:</div>
+        <div>
+          {{
+            question.categories.length > 0
+              ? question.categories.join(', ')
+              : 'None'
+          }}
+        </div>
+      </div>
       <div class="q-mb-xs">{{ question.content }}</div>
       <q-separator />
 
       <template v-for="answer in question.answers" :key="answer.id">
-        <div>{{ answer.content }}</div>
+        <div class="row q-py-sm">
+          <div class="text-bold q-mr-xs">
+            {{ answer.authorName }} ({{ formatRole(answer.role) }}):
+          </div>
+          <div>{{ answer.content }}</div>
+        </div>
+        <q-separator />
       </template>
 
       <template v-if="isLoggedIn === true">
-        <div class="text-center text-h6 text-bold q-mt-md">Post an Answer:</div>
-        <q-editor v-model="editor"></q-editor>
-        <q-btn
-          label="Post"
-          class="q-mt-md self-center"
-          @click="answerQuestion"
-        />
-        <error-message class="q-mt-sm" :message="errorMessage" />
+        <template v-if="account.role === 'patient'">
+          <div class="q-mt-md text-center">
+            You must be a doctor to post an answer.
+          </div>
+        </template>
+        <template v-else>
+          <div class="text-center text-h6 text-bold q-mt-md">
+            Post an Answer:
+          </div>
+          <q-input
+            class="q-mb-sm"
+            v-model="answererName"
+            label="Name"
+            outlined
+            dense
+          />
+          <q-editor v-model="editor"></q-editor>
+          <q-btn
+            label="Post"
+            class="q-mt-md self-center"
+            @click="answerQuestion"
+          />
+          <error-message class="q-mt-sm" :message="errorMessage" />
+        </template>
       </template>
       <template v-else>
         <div class="q-mt-md text-center">Please log in to post an answer.</div>
@@ -35,7 +67,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { api, fetchQuestions } from 'src/utils';
+import { api, fetchQuestions, formatRole } from 'src/utils';
 import { Question, account, isLoggedIn, questions } from 'src/state';
 import PageLoadingSpinner from 'components/PageLoadingSpinner.vue';
 import { Notify } from 'quasar';
@@ -121,6 +153,8 @@ export default defineComponent({
       answerQuestion,
       isLoggedIn,
       question,
+      formatRole,
+      account,
     };
   },
 });

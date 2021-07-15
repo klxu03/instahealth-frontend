@@ -82,6 +82,10 @@ export default defineComponent({
       }
     });
 
+    watch(doctorRole, (role) => {
+      roleString.value = role.value;
+    });
+
     const router = useRouter();
 
     async function register() {
