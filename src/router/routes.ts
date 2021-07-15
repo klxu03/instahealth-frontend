@@ -19,6 +19,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/pages/QuestionsPage.vue'),
       },
       {
+        path: '/question/:id',
+        component: () => import('src/pages/QuestionPage.vue'),
+      },
+      {
         path: '/register',
         component: () => import('src/pages/RegisterPage.vue'),
       },

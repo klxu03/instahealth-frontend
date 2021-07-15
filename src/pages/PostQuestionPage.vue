@@ -25,8 +25,10 @@ export default defineComponent({
     async function postQuestion() {
       console.log(editor.value);
       await api.post('question', {
-        question: question.value,
-        content: editor.value,
+        json: {
+          question: question.value,
+          content: editor.value,
+        },
       });
     }
 

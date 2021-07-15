@@ -11,10 +11,10 @@
     <q-input label="Confirm Password" v-model="confirmPassword" outlined />
     <div class="row justify-center">
       <div class="column justify-center">I am a:</div>
-      <q-radio v-model="role" val="patient" label="Patient" />
-      <q-radio v-model="role" val="doctor" label="Doctor" />
+      <q-radio v-model="medicalRole" val="patient" label="Patient" />
+      <q-radio v-model="medicalRole" val="doctor" label="Doctor" />
     </div>
-    <div v-if="role === 'doctor'">
+    <div v-if="medicalRole === 'doctor'">
       <div class="text-center text-h6 text-bold q-mb-sm">Speciality:</div>
       <q-select outlined v-model="doctorRole" :options="doctorRoles" />
     </div>
@@ -24,16 +24,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { api } from 'src/utils';
 import ErrorMessage from 'components/ErrorMessage.vue';
 
 const doctorRoles = [
-  'Family Doctor',
-  'Cardiologist',
-  'Dermatologist',
-  'Optometrist',
-  'Dentist',
+  {
+    value: 'family-doctor',
+    label: 'Family Doctor',
+  },
+  {
+    value: 'cardiologist',
+    label: 'Cardiologist',
+  },
+  {
+    value: 'dermatologist',
+    label: 'Dermatologist',
+  },
+  {
+    value: 'optometrist',
+    label: 'Optometrist',
+  },
+  {
+    value: 'dentist',
+    label: 'Dentist',
+  },
+  {
+    value: 'otolaryngologist',
+    label: 'Otolaryngologist',
+  },
 ];
 
 export default defineComponent({
@@ -43,8 +62,17 @@ export default defineComponent({
     const password = ref('');
     const confirmPassword = ref('');
     const errorMessage = ref('');
-    const role = ref('patient');
+    const medicalRole = ref('patient');
     const doctorRole = ref(doctorRoles[0]);
+    const roleString = ref('patient');
+
+    watch(medicalRole, (roleValue) => {
+      if (roleValue === 'patient') {
+        roleString.value = 'patient';
+      } else if (roleValue === 'doctor') {
+        roleString.value = doctorRole.value.value;
+      }
+    });
 
     async function register() {
       if (password.value !== confirmPassword.value) {
@@ -60,7 +88,7 @@ export default defineComponent({
           json: {
             email: email.value,
             password: password.value,
-            role: role.value,
+            role: roleString.value,
           },
         });
       } catch (e: unknown) {
@@ -74,8 +102,9 @@ export default defineComponent({
       password,
       confirmPassword,
       errorMessage,
-      role,
+      roleString,
       doctorRole,
+      medicalRole,
       doctorRoles,
     };
   },

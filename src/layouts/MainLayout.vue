@@ -54,6 +54,7 @@ import {
   mdiCommentQuestion,
 } from '@quasar/extras/mdi-v5';
 import EssentialLink from 'components/EssentialLink.vue';
+import ky from 'ky';
 
 const links = [
   {
@@ -73,10 +74,42 @@ const links = [
   },
 ];
 
+import { account, Account, isLoggedIn } from 'src/state';
+import delay from 'delay';
+
 export default defineComponent({
   name: 'MainLayout',
   components: { EssentialLink },
   setup() {
+    async function getAccount(accountId: string) {
+      // const response = await ky.get('account', {
+      //   json: {
+      //     id: accountId,
+      //   },
+      // });
+      // const result = (await response.json()) as Account;
+      await delay(500);
+
+      const result = {
+        id: 1,
+        name: 'Kevin Xu',
+        role: 'patient',
+      };
+
+      account.id = result.id;
+      account.name = result.name;
+      account.role = result.role;
+    }
+
+    const accountId = localStorage.getItem('accountId');
+    if (accountId != null) {
+      void getAccount(accountId).then(() => {
+        isLoggedIn.value = true;
+      });
+    } else {
+      isLoggedIn.value = false;
+    }
+
     const leftDrawerOpen = ref(false);
 
     return {
