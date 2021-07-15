@@ -47,7 +47,7 @@ const roleToIconMap = {
 export default defineComponent({
   props: {
     answers: {
-      type: Array as PropType<Answer>,
+      type: Array as PropType<Answer[]>,
       required: true,
     },
   },
