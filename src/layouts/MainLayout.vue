@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar class="row">
         <q-btn
           flat
           dense
@@ -11,7 +11,26 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>InstaHealth</q-toolbar-title>
+        <div class="text-h6 q-mx-md text-bold">InstaHealth</div>
+
+        <q-input
+          dark
+          dense
+          standout
+          v-model="searchText"
+          class="q-mx-sm"
+          style="flex-grow: 1"
+        >
+          <template v-slot:append>
+            <q-icon v-if="searchText === ''" :name="mdiMagnify" />
+            <q-icon
+              v-else
+              :name="mdiClose"
+              class="cursor-pointer"
+              @click="text = ''"
+            />
+          </template>
+        </q-input>
 
         <template v-if="isLoggedIn">
           <q-btn label="Logout" @click="logout" color="secondary" />
@@ -57,6 +76,8 @@ import {
   mdiViewDashboard,
   mdiForum,
   mdiCommentQuestion,
+  mdiMagnify,
+  mdiClose,
 } from '@quasar/extras/mdi-v5';
 import EssentialLink from 'components/EssentialLink.vue';
 import ky from 'ky';
@@ -125,12 +146,16 @@ export default defineComponent({
       await router.push('/login');
     }
 
+    const searchText = ref('');
     return {
+      searchText,
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
       mdiMenu,
+      mdiMagnify,
+      mdiClose,
       links,
       isLoggedIn,
       logout,

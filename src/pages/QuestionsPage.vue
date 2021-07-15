@@ -1,6 +1,6 @@
 <template>
   <q-page class="column items-center">
-    <div class="text-h3 text-bold q-mt-md">Recent Questions</div>
+    <div class="text-h3 text-bold q-mt-md q-mb-sm">Recent Questions</div>
     <q-list class="column items-stretch" style="width: 600px">
       <template v-for="question in questions" :key="question.id">
         <q-item

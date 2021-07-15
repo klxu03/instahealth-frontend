@@ -14,8 +14,8 @@
     </div>
   </template>
   <template v-else-if="isLoggedIn === false">
-    <div class="text-center text-h6">
-      You need to be logged in to ask a question.
+    <div class="text-center text-h6 q-mt-md">
+      You must be logged in to ask a question.
     </div>
   </template>
   <template>
