@@ -24,7 +24,7 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered class="bg-grey-1">
-      <div style="font-weight: bold" class="text-h4 text-center q-mt-md">
+      <div style="font-weight: bold" class="text-h4 text-center q-my-md">
         InstaHealth
       </div>
 
