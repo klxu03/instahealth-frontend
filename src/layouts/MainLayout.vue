@@ -24,14 +24,18 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered class="bg-grey-1">
-      <div style="font-weight: bold" class="text-h4" text-cente q-mt-mdr>
+      <div style="font-weight: bold" class="text-h4 text-center q-mt-md">
         InstaHealth
       </div>
 
       <q-list>
-        <q-item to="/">Dashboard</q-item>
-        <q-item to="/questions">Questions</q-item>
-        <q-item to="/post">Post a Question</q-item>
+        <essential-link
+          v-for="link in links"
+          :key="link.title"
+          :title="link.title"
+          :route="link.route"
+          :icon="link.icon"
+        />
       </q-list>
     </q-drawer>
 
@@ -43,10 +47,35 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { mdiMenu } from '@quasar/extras/mdi-v5';
+import {
+  mdiMenu,
+  mdiViewDashboard,
+  mdiForum,
+  mdiCommentQuestion,
+} from '@quasar/extras/mdi-v5';
+import EssentialLink from 'components/EssentialLink.vue';
+
+const links = [
+  {
+    title: 'Dashboard',
+    route: '/',
+    icon: mdiViewDashboard,
+  },
+  {
+    title: 'Questions',
+    route: '/questions',
+    icon: mdiForum,
+  },
+  {
+    title: 'Post Question',
+    route: '/post',
+    icon: mdiCommentQuestion,
+  },
+];
 
 export default defineComponent({
   name: 'MainLayout',
+  components: { EssentialLink },
   setup() {
     const leftDrawerOpen = ref(false);
 
@@ -56,6 +85,7 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
       mdiMenu,
+      links,
     };
   },
 });
