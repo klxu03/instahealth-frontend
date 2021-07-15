@@ -1,5 +1,8 @@
 <template>
-  <q-list class="column items-stretch text-black" v-if="filteredQuestions.length > 0">
+  <q-list
+    class="column items-stretch text-black"
+    v-if="filteredQuestions.length > 0"
+  >
     <template v-for="question in filteredQuestions" :key="question.id">
       <q-item
         :to="`/question/${question.id}`"
@@ -26,7 +29,7 @@
       <q-separator />
     </template>
   </q-list>
-  <div v-else class='text-black q-pa-md'>No questions found.</div>
+  <div v-else class="text-black">No questions found.</div>
 </template>
 
 <script lang="ts">

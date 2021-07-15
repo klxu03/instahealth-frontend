@@ -38,6 +38,7 @@ import { api } from 'src/utils';
 import { defineComponent, ref } from 'vue';
 import ErrorMessage from 'components/ErrorMessage.vue';
 import { HTTPError } from 'ky';
+import { Notify } from 'quasar';
 
 export default defineComponent({
   components: { PageLoadingSpinner, ErrorMessage },
@@ -61,6 +62,11 @@ export default defineComponent({
         });
 
         const result = (await response.json()) as { id: number };
+
+        Notify.create({
+          message: 'Question successfully posted!',
+          type: 'positive',
+        });
 
         questions.push({
           id: result.id,

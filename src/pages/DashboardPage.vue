@@ -2,7 +2,7 @@
   <template v-if="isLoggedIn === true">
     <div class="row justify-around q-pa-lg">
       <div class="column">
-        <div class="text-h4 text-bold text-center">My Questions</div>
+        <div class="text-h4 text-bold text-center q-mb-sm">My Questions</div>
         <questions-list />
       </div>
       <div class="column items-center q-gutter-y-sm">

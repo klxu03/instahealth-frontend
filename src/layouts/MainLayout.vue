@@ -29,6 +29,7 @@
             v-if="searchText !== ''"
             style="
               position: absolute;
+              padding: 10px;
               left: 5px;
               background-color: white;
               border: 1px solid black;
@@ -92,7 +93,7 @@ import EssentialLink from 'components/EssentialLink.vue';
 
 import { isLoggedIn, questions, Question } from 'src/state';
 import { useRouter } from 'vue-router';
-import { api, fetchAccount } from 'src/utils';
+import { api, fetchAccount, fetchQuestions } from 'src/utils';
 import QuestionsList from 'src/components/QuestionsList.vue';
 
 const links = [
@@ -117,15 +118,6 @@ export default defineComponent({
   name: 'MainLayout',
   components: { EssentialLink, QuestionsList },
   setup() {
-    async function fetchQuestions() {
-      const response = await api.get('questions');
-      const result = (await response.json()) as Question[];
-
-      for (const question of result) {
-        questions.push(question);
-      }
-    }
-
     const accountId = localStorage.getItem('accountId');
     if (accountId != null) {
       void fetchAccount(accountId)

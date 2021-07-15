@@ -13,24 +13,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Question, questions } from 'src/state';
-import { api } from 'src/utils';
+import { fetchQuestions } from 'src/utils';
 import QuestionsList from 'src/components/QuestionsList.vue';
 
 export default defineComponent({
   name: '',
   components: { QuestionsList },
   setup() {
-    async function fetchQuestions() {
-      const response = await api.get('questions');
-      const result = (await response.json()) as Question[];
-
-      questions.splice(0, questions.length);
-      for (const question of result) {
-        questions.push(question);
-      }
-    }
-
     void fetchQuestions();
 
     return {
