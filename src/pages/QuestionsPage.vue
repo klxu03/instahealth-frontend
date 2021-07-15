@@ -1,5 +1,5 @@
 <template>
-  <q-page class="column items-center">
+  <q-page class="column items-center" style='width: 100%'>
     <div class="text-h3 text-bold q-mt-md q-mb-sm">Recent Questions</div>
     <q-btn
       class="q-mb-md"
