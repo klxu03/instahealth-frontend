@@ -16,7 +16,7 @@
         "
       >
         <q-item-section top avatar>
-          <q-icon :name="getIconForRole(question.role)" />
+          <q-icon :name="getIconForCategory(question.categories[0])" />
         </q-item-section>
 
         <q-item-section>
@@ -49,17 +49,18 @@ import {
   mdiEarHearing,
   mdiHospitalBox,
   mdiChevronRight,
+  mdiMedicalBag,
 } from '@quasar/extras/mdi-v5';
 import { questions } from 'src/state';
 
-const roleToIconMap = {
+const roleToCategoryMap = {
   patient: mdiHelp,
-  cardiologist: mdiHeart,
-  dermatologist: mdiHandRight,
-  optometrist: mdiEye,
-  dentist: mdiTooth,
-  otolarynogolist: mdiEarHearing,
-  familyDoctor: mdiHospitalBox,
+  heart: mdiHeart,
+  skin: mdiHandRight,
+  eye: mdiEye,
+  teeth: mdiTooth,
+  ear: mdiEarHearing,
+  family: mdiHospitalBox,
 };
 
 export default defineComponent({
@@ -70,8 +71,14 @@ export default defineComponent({
     },
   },
   setup(props) {
-    function getIconForRole(role: string) {
-      return roleToIconMap[role as keyof typeof roleToIconMap];
+    function getIconForCategory(category: string) {
+      const icon =
+        roleToCategoryMap[category as keyof typeof roleToCategoryMap];
+      if (icon !== undefined) {
+        return icon;
+      } else {
+        return mdiMedicalBag;
+      }
     }
 
     const filteredQuestions = computed(() => {
@@ -84,7 +91,7 @@ export default defineComponent({
 
     return {
       questions,
-      getIconForRole,
+      getIconForCategory,
       mdiChevronRight,
       filteredQuestions,
     };
