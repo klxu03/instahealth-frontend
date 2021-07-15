@@ -7,6 +7,11 @@
       </div>
       <div class="q-mb-xs">{{ question.content }}</div>
       <q-separator />
+
+      <template v-for="answer in question.answers" :key="answer.id">
+        <div>{{ answer.content }}</div>
+      </template>
+
       <template v-if="isLoggedIn === true">
         <div class="text-center text-h6 text-bold q-mt-md">Post an Answer:</div>
         <q-editor v-model="editor"></q-editor>
@@ -28,9 +33,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { api } from 'src/utils';
+import { api, fetchQuestions } from 'src/utils';
 import { Question, account, isLoggedIn, questions } from 'src/state';
 import PageLoadingSpinner from 'components/PageLoadingSpinner.vue';
 import { Notify } from 'quasar';
@@ -45,35 +50,30 @@ export default defineComponent({
     const errorMessage = ref('');
     const answererName = ref('');
 
-    const question = reactive<Question>({} as Question);
     const isQuestionLoaded = ref(false);
 
     const router = useRouter();
     const questionId = route.params.id?.toString();
 
-    async function fetchQuestion() {
-      try {
-        const response = await api.get(`questions/${questionId}`);
-        const result = (await response.json()) as Question;
-        Object.entries(result).forEach(([key, value]) => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          question[key] = value;
-        });
-      } catch (e) {
-        Notify.create({
-          message: `Could not load question ${route.params.id.toString()}`,
-          type: 'negative',
-        });
-        await router.replace('/questions');
-      }
-    }
+    let question = computed(() => {
+      return questions.find(
+        (question) => question.id.toString() === questionId
+      ) as Question;
+    });
 
     if (questionId == null) {
       void router.replace('/questions');
     } else {
-      void fetchQuestion().then(() => {
-        isQuestionLoaded.value = true;
+      void fetchQuestions().then(() => {
+        if (question.value === undefined) {
+          Notify.create({
+            message: `Could not load question ${route.params.id.toString()}`,
+            type: 'negative',
+          });
+          void router.replace('/questions');
+        } else {
+          isQuestionLoaded.value = true;
+        }
       });
     }
 
