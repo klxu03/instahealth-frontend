@@ -3,6 +3,13 @@
     <div class="q-ma-md column">
       <div class="text-h3 text-center text-bold q-mb-sm">Post a Question</div>
       <q-input
+        v-model="authorName"
+        class="q-mb-sm"
+        label="Name"
+        outlined
+        dense
+      />
+      <q-input
         v-model="question"
         class="q-mb-sm"
         label="Question"
@@ -35,6 +42,7 @@ import { HTTPError } from 'ky';
 export default defineComponent({
   components: { PageLoadingSpinner, ErrorMessage },
   setup() {
+    const authorName = ref('');
     const editor = ref('');
     const question = ref('');
     const errorMessage = ref('');
@@ -42,8 +50,10 @@ export default defineComponent({
     async function postQuestion() {
       try {
         errorMessage.value = '';
-        const response = await api.post('question', {
+        const response = await api.post('questions', {
           json: {
+            authorName: 'Kevin Xu',
+            datePosted: Date.now(),
             question: question.value,
             content: editor.value,
             role: 'patient',
@@ -63,7 +73,14 @@ export default defineComponent({
       }
     }
 
-    return { editor, question, isLoggedIn, postQuestion, errorMessage };
+    return {
+      editor,
+      question,
+      isLoggedIn,
+      postQuestion,
+      errorMessage,
+      authorName,
+    };
   },
 });
 </script>

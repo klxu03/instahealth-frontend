@@ -137,7 +137,12 @@ export default defineComponent({
         .then(() => {
           isLoggedIn.value = true;
         })
-        .then(fetchQuestions);
+        .then(fetchQuestions)
+        .catch(() => {
+          // If couldn't log user in, log them out
+          isLoggedIn.value = false;
+          localStorage.removeItem('accountId');
+        });
     } else {
       isLoggedIn.value = false;
     }
