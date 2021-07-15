@@ -27,6 +27,8 @@
 import { defineComponent, ref, watch } from 'vue';
 import { api } from 'src/utils';
 import ErrorMessage from 'components/ErrorMessage.vue';
+import { useRouter } from 'vue-router';
+import { isLoggedIn } from 'src/state';
 
 const doctorRoles = [
   {
@@ -74,6 +76,8 @@ export default defineComponent({
       }
     });
 
+    const router = useRouter();
+
     async function register() {
       if (password.value !== confirmPassword.value) {
         errorMessage.value =
@@ -84,13 +88,17 @@ export default defineComponent({
       errorMessage.value = '';
 
       try {
-        await api.post('register', {
-          json: {
-            email: email.value,
-            password: password.value,
-            role: roleString.value,
-          },
-        });
+        // await api.post('register', {
+        //   json: {
+        //     email: email.value,
+        //     password: password.value,
+        //     role: roleString.value,
+        //   },
+        // });
+
+        localStorage.setItem('accountId', '1');
+        isLoggedIn.value = true;
+        await router.push('/');
       } catch (e: unknown) {
         errorMessage.value = (e as Error).toString();
       }

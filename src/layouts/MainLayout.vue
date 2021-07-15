@@ -13,13 +13,18 @@
 
         <q-toolbar-title>InstaHealth</q-toolbar-title>
 
-        <q-btn
-          class="q-mr-sm"
-          label="Register"
-          to="/register"
-          color="secondary"
-        />
-        <q-btn label="Login" to="/login" color="accent" />
+        <template v-if="isLoggedIn">
+          <q-btn label="Logout" @click="logout" color="secondary" />
+        </template>
+        <template v-else>
+          <q-btn
+            class="q-mr-sm"
+            label="Register"
+            to="/register"
+            color="secondary"
+          />
+          <q-btn label="Login" to="/login" color="accent" />
+        </template>
       </q-toolbar>
     </q-header>
 
@@ -75,6 +80,7 @@ const links = [
 ];
 
 import { account, Account, isLoggedIn } from 'src/state';
+import { useRouter } from 'vue-router';
 import delay from 'delay';
 
 export default defineComponent({
@@ -112,6 +118,13 @@ export default defineComponent({
 
     const leftDrawerOpen = ref(false);
 
+    const router = useRouter();
+    async function logout() {
+      localStorage.removeItem('accountId');
+      isLoggedIn.value = false;
+      await router.push('/login');
+    }
+
     return {
       leftDrawerOpen,
       toggleLeftDrawer() {
@@ -119,6 +132,8 @@ export default defineComponent({
       },
       mdiMenu,
       links,
+      isLoggedIn,
+      logout,
     };
   },
 });

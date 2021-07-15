@@ -18,6 +18,7 @@ import { defineComponent, ref } from 'vue';
 import { api } from 'src/utils';
 import ErrorMessage from 'components/ErrorMessage.vue';
 import { useRouter } from 'vue-router';
+import { isLoggedIn } from 'src/state';
 
 export default defineComponent({
   components: { ErrorMessage },
@@ -39,6 +40,7 @@ export default defineComponent({
         //   },
         // });
         localStorage.setItem('accountId', '1');
+        isLoggedIn.value = true;
         await router.push('/');
       } catch (e: unknown) {
         errorMessage.value = (e as Error).toString();

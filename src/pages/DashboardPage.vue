@@ -5,8 +5,18 @@
         <div class="text-h4 text-bold">My Questions</div>
       </div>
       <div class="column items-center q-gutter-y-sm">
-        <q-btn :icon="mdiMagnify" label="Search Questions" no-caps />
-        <q-btn :icon="mdiChatQuestion" label="Post a Question" no-caps />
+        <q-btn
+          :icon="mdiMagnify"
+          label="Search Questions"
+          to="/questions"
+          no-caps
+        />
+        <q-btn
+          :icon="mdiChatQuestion"
+          label="Post a Question"
+          to="/post"
+          no-caps
+        />
       </div>
     </div>
   </template>
@@ -16,10 +26,7 @@
     </div>
   </template>
   <template v-else>
-    <div
-      style="height: 100%; width: 100%"
-      class="column justify-center items-center"
-    >
+    <div style="width: 100%" class="column justify-center items-center q-mt-lg">
       <q-spinner-cube size="100px" />
     </div>
   </template>
