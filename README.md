@@ -1,23 +1,30 @@
 # InstaHealth (instahealth)
 
-A Quasar Framework app
+Add to your .env file:
+```shell script
+SERVER_URL=http://localhost:5000
+```
 
 ## Install the dependencies
+
 ```bash
 yarn
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
+
 ```bash
-quasar dev
+yarn dev
 ```
 
 ### Lint the files
+
 ```bash
 yarn run lint
 ```
 
 ### Build the app for production
+
 ```bash
 quasar build
 ```
