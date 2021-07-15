@@ -1,37 +1,36 @@
 <template>
-  <q-card>
-    <q-btn label="Email" v-model="email" />
-    <q-btn label="Password" v-model="password" />
-    <q-btn label="Confirm Password" v-model="confirmPassword" />
-    <div v-if="errorMessage">{{ errorMessage }}</div>
+  <q-card
+    style="width: 500px"
+    class="column items-stretch q-gutter-y-md q-pa-md"
+  >
+    <div class="text-h3 text-center q-mt-none" style="font-weight: bold">Login</div>
+    <q-input label="Email" v-model="email" outlined />
+    <q-input label="Password" v-model="password" outlined />
+    <q-btn label="Login" @click="login" color="primary" />
+    <error-message :message="errorMessage" />
   </q-card>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { api } from 'src/utils';
+import ErrorMessage from 'components/ErrorMessage.vue';
 
 export default defineComponent({
+  components: { ErrorMessage },
   setup() {
     const email = ref('');
     const password = ref('');
-    const confirmPassword = ref('');
     const errorMessage = ref('');
 
     async function login() {
-      if (password.value !== confirmPassword.value) {
-        errorMessage.value =
-          'Password is not the same as the confirm password.';
-      }
-
       errorMessage.value = '';
 
       try {
-        await api.post('/login', {
+        await api.post('login', {
           json: {
             email: email.value,
             password: password.value,
-            confirmPassword: confirmPassword.value,
           },
         });
       } catch (e: unknown) {
@@ -43,7 +42,7 @@ export default defineComponent({
       login,
       email,
       password,
-      confirmPassword,
+      errorMessage,
     };
   },
 });
