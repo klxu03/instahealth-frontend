@@ -61,11 +61,17 @@ const roleToCategoryMap = {
   general: mdiHospitalBox,
 };
 
+
+
 export default defineComponent({
   props: {
     filter: {
       type: String,
       default: '',
+    },
+    myQuestions: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props) {

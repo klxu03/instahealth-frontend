@@ -12,7 +12,9 @@
             <div>
               {{
                 question.categories.length > 0
-                  ? question.categories.join(', ')
+                  ? question.categories
+                      .map((category) => categoryToRole[category])
+                      .join(', ')
                   : 'None'
               }}
             </div>
@@ -196,6 +198,14 @@ export default defineComponent({
       isCategoryDialogVisible.value = false;
     }
 
+    const categoryToRole = {
+      heart: 'Cardiologist',
+      skin: 'Dermatologist',
+      eye: 'Optometrist',
+      teeth: 'Dentist',
+      ear: 'Otolaryngologist',
+    };
+
     return {
       isQuestionLoaded,
       editor,
@@ -213,6 +223,7 @@ export default defineComponent({
       isCategoryDialogVisible,
       newCategory,
       confirmCategoryChange,
+      categoryToRole,
     };
   },
 });

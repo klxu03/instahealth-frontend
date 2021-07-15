@@ -3,7 +3,7 @@
     <div class="row justify-around q-pa-lg">
       <div class="column">
         <div class="text-h4 text-bold text-center q-mb-sm">My Questions</div>
-        <questions-list />
+        <questions-list my-questions />
       </div>
       <div class="column items-center q-gutter-y-sm">
         <q-btn
