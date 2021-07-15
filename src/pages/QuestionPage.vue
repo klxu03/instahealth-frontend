@@ -2,6 +2,10 @@
   <template v-if="isQuestionLoaded">
     <div class="text-h3">{{ question }}</div>
     <div>{{ content }}</div>
+
+    <q-editor v-model="editor"></q-editor>
+    <q-btn label="Post" class="q-mt-md self-center" @click="answerQuestion" />
+    <error-message class="q-mt-sm" :message="errorMessage" />
   </template>
   <template v-else>
     <page-loading-spinner />
@@ -33,6 +37,8 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const editor = ref('');
+    const errorMessage = ref('');
 
     const question = reactive<Question>({} as Question);
     const isQuestionLoaded = ref(false);
@@ -51,8 +57,15 @@ export default defineComponent({
       isQuestionLoaded.value = true;
     });
 
+    async function answerQuestion() {
+      await api.get(``)
+    }
+
     return {
       isQuestionLoaded,
+      editor,
+      errorMessage,
+      answerQuestion,
     };
   },
 });

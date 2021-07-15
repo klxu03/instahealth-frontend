@@ -13,6 +13,13 @@ export type Question = {
   role: string;
 };
 
+export type Answer = {
+  id: number;
+  content: string;
+  role: string;
+  authorName: string;
+};
+
 export const account = reactive<Account>({} as Account);
 
 export const isLoggedIn = ref<boolean | null>(null);

@@ -13,24 +13,32 @@
 
         <div class="text-h6 q-mx-md text-bold">InstaHealth</div>
 
-        <q-input
-          dark
-          dense
-          standout
-          v-model="searchText"
-          class="q-mx-sm"
-          style="flex-grow: 1"
-        >
-          <template v-slot:append>
-            <q-icon v-if="searchText === ''" :name="mdiMagnify" />
-            <q-icon
-              v-else
-              :name="mdiClose"
-              class="cursor-pointer"
-              @click="text = ''"
-            />
-          </template>
-        </q-input>
+        <div style="position: relative; flex-grow: 1" class="q-mr-sm">
+          <q-input dark dense standout v-model="searchText" class="q-mx-sm">
+            <template v-slot:append>
+              <q-icon v-if="searchText === ''" :name="mdiMagnify" />
+              <q-icon
+                v-else
+                :name="mdiClose"
+                class="cursor-pointer"
+                @click="text = ''"
+              />
+            </template>
+          </q-input>
+          <div
+            v-if="searchText !== ''"
+            style="
+              position: absolute;
+              left: 10px;
+              background-color: white;
+              border: 1px solid black;
+              border-radius: 5px;
+              z-index: 999;
+            "
+          >
+            <questions-list @click="searchText = ''" :filter="searchText" />
+          </div>
+        </div>
 
         <template v-if="isLoggedIn">
           <q-btn label="Logout" @click="logout" color="secondary" />
@@ -85,6 +93,7 @@ import { account, Account, isLoggedIn, questions, Question } from 'src/state';
 import { useRouter } from 'vue-router';
 import { api } from 'src/utils';
 import delay from 'delay';
+import QuestionsList from 'src/components/QuestionsList.vue';
 
 const links = [
   {
@@ -106,7 +115,7 @@ const links = [
 
 export default defineComponent({
   name: 'MainLayout',
-  components: { EssentialLink },
+  components: { EssentialLink, QuestionsList },
   setup() {
     async function getAccount(accountId: string) {
       const response = await api.get('account', {

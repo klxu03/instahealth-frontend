@@ -2,7 +2,8 @@
   <template v-if="isLoggedIn === true">
     <div class="row justify-around q-pa-lg">
       <div class="column">
-        <div class="text-h4 text-bold">My Questions</div>
+        <div class="text-h4 text-bold text-center">My Questions</div>
+        <questions-list />
       </div>
       <div class="column items-center q-gutter-y-sm">
         <q-btn
@@ -31,19 +32,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import { mdiMagnify, mdiChatQuestion } from '@quasar/extras/mdi-v5';
 import { account, isLoggedIn } from 'src/state';
 import PageLoadingSpinner from 'src/components/PageLoadingSpinner.vue';
+import { questions } from 'src/state';
+import QuestionsList from 'src/components/QuestionsList.vue';
 
 export default defineComponent({
-  components: { PageLoadingSpinner },
+  components: { PageLoadingSpinner, QuestionsList },
   setup() {
+    const myQuestions = computed(() => {
+      const questionsArr = [];
+      for (const question of questions) {
+        questionsArr.push(question);
+      }
+      return questionsArr;
+    });
+
     return {
       mdiMagnify,
       mdiChatQuestion,
       isLoggedIn,
       account,
+      myQuestions,
     };
   },
 });

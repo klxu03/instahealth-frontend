@@ -69,7 +69,8 @@ export default defineComponent({
           role: 'patient',
         });
       } catch (e: unknown) {
-        errorMessage.value = await (e as HTTPError).response.text();
+        errorMessage.value =
+          (await (e as HTTPError).response?.text()) ?? (e as Error).toString();
       }
     }
 
