@@ -1,5 +1,5 @@
 <template>
-  <q-list class="column items-stretch" v-if="filteredQuestions.length > 0">
+  <q-list class="column items-stretch text-black" v-if="filteredQuestions.length > 0">
     <template v-for="question in filteredQuestions" :key="question.id">
       <q-item
         :to="`/question/${question.id}`"

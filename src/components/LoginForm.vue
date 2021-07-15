@@ -18,7 +18,7 @@ import { defineComponent, ref } from 'vue';
 import { api, fetchAccount } from 'src/utils';
 import ErrorMessage from 'components/ErrorMessage.vue';
 import { useRouter } from 'vue-router';
-import { Account, isLoggedIn } from 'src/state';
+import { isLoggedIn } from 'src/state';
 import { HTTPError } from 'ky';
 
 export default defineComponent({
