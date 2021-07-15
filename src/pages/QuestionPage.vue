@@ -1,10 +1,26 @@
 <template>
   <template v-if="isQuestionLoaded">
-    <div class="text-h3">{{ question }}</div>
-    <div>{{ content }}</div>
-    <q-editor v-model="editor"></q-editor>
-    <q-btn label="Post" class="q-mt-md self-center" @click="answerQuestion" />
-    <error-message class="q-mt-sm" :message="errorMessage" />
+    <q-card class="q-ma-md q-pa-md">
+      <div class="row">
+        <div class="text-h6 text-bold q-mr-sm">Question:</div>
+        <div class="text-h6">{{ question.question }}</div>
+      </div>
+      <div class="q-mb-xs">{{ question.content }}</div>
+      <q-separator />
+      <template v-if="isLoggedIn === true">
+        <div class="text-center text-h6 text-bold">Post an Answer:</div>
+        <q-editor v-model="editor"></q-editor>
+        <q-btn
+          label="Post"
+          class="q-mt-md self-center"
+          @click="answerQuestion"
+        />
+        <error-message class="q-mt-sm" :message="errorMessage" />
+      </template>
+      <template v-else>
+        <div class="q-mt-md text-center">Please log in to post an answer.</div>
+      </template>
+    </q-card>
   </template>
   <template v-else>
     <page-loading-spinner />
@@ -15,26 +31,13 @@
 import { defineComponent, ref, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { api } from 'src/utils';
-import { Question, account } from 'src/state';
+import { Question, account, isLoggedIn } from 'src/state';
 import PageLoadingSpinner from 'components/PageLoadingSpinner.vue';
 import { Notify } from 'quasar';
+import ErrorMessage from 'components/ErrorMessage.vue';
 
 export default defineComponent({
-  components: { PageLoadingSpinner },
-  props: {
-    question: {
-      type: String,
-      required: true,
-    },
-    content: {
-      type: String,
-      required: true,
-    },
-    authorName: {
-      type: String,
-      required: true,
-    },
-  },
+  components: { PageLoadingSpinner, ErrorMessage },
   setup() {
     const route = useRoute();
     const editor = ref('');
@@ -90,6 +93,8 @@ export default defineComponent({
       errorMessage,
       answererName,
       answerQuestion,
+      isLoggedIn,
+      question,
     };
   },
 });
