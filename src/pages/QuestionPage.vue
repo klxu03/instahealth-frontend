@@ -12,15 +12,8 @@
 import { defineComponent, ref, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from 'src/utils';
+import { Question } from 'src/state';
 import PageLoadingSpinner from 'components/PageLoadingSpinner.vue';
-
-type Question = {
-  id: number;
-  question: string;
-  content: string;
-  authorName: string;
-  datePosted: string;
-};
 
 export default defineComponent({
   components: { PageLoadingSpinner },

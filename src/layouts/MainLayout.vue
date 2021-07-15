@@ -100,7 +100,7 @@ const links = [
   },
 ];
 
-import { account, Account, isLoggedIn } from 'src/state';
+import { account, Account, isLoggedIn, questions, Question } from 'src/state';
 import { useRouter } from 'vue-router';
 import delay from 'delay';
 
@@ -109,30 +109,35 @@ export default defineComponent({
   components: { EssentialLink },
   setup() {
     async function getAccount(accountId: string) {
-      // const response = await ky.get('account', {
-      //   json: {
-      //     id: accountId,
-      //   },
-      // });
-      // const result = (await response.json()) as Account;
+      const response = await ky.get('account', {
+        searchParams: {
+          id: accountId,
+        },
+      });
+      const result = (await response.json()) as Account;
       await delay(500);
-
-      const result = {
-        id: 1,
-        name: 'Kevin Xu',
-        role: 'patient',
-      };
 
       account.id = result.id;
       account.name = result.name;
       account.role = result.role;
     }
 
+    async function fetchQuestions() {
+      const response = await ky.get('questions');
+      const result = (await response.json()) as Question[];
+
+      for (const question of result) {
+        questions.push(question);
+      }
+    }
+
     const accountId = localStorage.getItem('accountId');
     if (accountId != null) {
-      void getAccount(accountId).then(() => {
-        isLoggedIn.value = true;
-      });
+      void getAccount(accountId)
+        .then(() => {
+          isLoggedIn.value = true;
+        })
+        .then(fetchQuestions);
     } else {
       isLoggedIn.value = false;
     }

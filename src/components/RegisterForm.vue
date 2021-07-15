@@ -88,13 +88,13 @@ export default defineComponent({
       errorMessage.value = '';
 
       try {
-        // await api.post('register', {
-        //   json: {
-        //     email: email.value,
-        //     password: password.value,
-        //     role: roleString.value,
-        //   },
-        // });
+        await api.post('register', {
+          json: {
+            email: email.value,
+            password: password.value,
+            role: roleString.value,
+          },
+        });
 
         localStorage.setItem('accountId', '1');
         isLoggedIn.value = true;

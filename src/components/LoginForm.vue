@@ -33,12 +33,12 @@ export default defineComponent({
       errorMessage.value = '';
 
       try {
-        // await api.post('login', {
-        //   json: {
-        //     email: email.value,
-        //     password: password.value,
-        //   },
-        // });
+        await api.post('login', {
+          json: {
+            email: email.value,
+            password: password.value,
+          },
+        });
         localStorage.setItem('accountId', '1');
         isLoggedIn.value = true;
         await router.push('/');

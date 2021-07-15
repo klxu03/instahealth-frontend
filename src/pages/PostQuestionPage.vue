@@ -11,6 +11,7 @@
       />
       <q-editor v-model="editor"></q-editor>
       <q-btn label="Post" class="q-mt-md self-center" @click="postQuestion" />
+      <error-message class="q-mt-sm" :message="errorMessage" />
     </div>
   </template>
   <template v-else-if="isLoggedIn === false">
@@ -24,34 +25,44 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { api } from 'src/utils';
-import { isLoggedIn, questions } from 'src/state';
 import PageLoadingSpinner from 'src/components/PageLoadingSpinner.vue';
+import { isLoggedIn, questions } from 'src/state';
+import { api } from 'src/utils';
+import { defineComponent, ref } from 'vue';
+import ErrorMessage from 'components/ErrorMessage.vue';
 
 export default defineComponent({
-  components: { PageLoadingSpinner },
+  components: { PageLoadingSpinner, ErrorMessage },
   setup() {
     const editor = ref('');
     const question = ref('');
+    const errorMessage = ref('');
 
     async function postQuestion() {
-      questions.push({
-        id: questions.length + 1,
-        question: question.value,
-        content: editor.value,
-        role: 'patient',
-      });
+      try {
+        errorMessage.value = '';
+        const response = await api.post('question', {
+          json: {
+            question: question.value,
+            content: editor.value,
+            role: 'patient',
+          },
+        });
 
-      await api.post('question', {
-        json: {
+        const result = (await response.json()) as { id: number };
+
+        questions.push({
+          id: result.id,
           question: question.value,
           content: editor.value,
-        },
-      });
+          role: 'patient',
+        });
+      } catch (e: unknown) {
+        errorMessage.value = (e as Error).toString();
+      }
     }
 
-    return { editor, question, isLoggedIn, postQuestion };
+    return { editor, question, isLoggedIn, postQuestion, errorMessage };
   },
 });
 </script>
