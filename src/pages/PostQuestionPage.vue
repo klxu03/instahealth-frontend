@@ -30,6 +30,7 @@ import { isLoggedIn, questions } from 'src/state';
 import { api } from 'src/utils';
 import { defineComponent, ref } from 'vue';
 import ErrorMessage from 'components/ErrorMessage.vue';
+import { HTTPError } from 'ky';
 
 export default defineComponent({
   components: { PageLoadingSpinner, ErrorMessage },
@@ -58,7 +59,7 @@ export default defineComponent({
           role: 'patient',
         });
       } catch (e: unknown) {
-        errorMessage.value = (e as Error).toString();
+        errorMessage.value = await (e as HTTPError).response.text();
       }
     }
 

@@ -80,7 +80,11 @@ import {
   mdiClose,
 } from '@quasar/extras/mdi-v5';
 import EssentialLink from 'components/EssentialLink.vue';
-import ky from 'ky';
+
+import { account, Account, isLoggedIn, questions, Question } from 'src/state';
+import { useRouter } from 'vue-router';
+import { api } from 'src/utils';
+import delay from 'delay';
 
 const links = [
   {
@@ -100,16 +104,12 @@ const links = [
   },
 ];
 
-import { account, Account, isLoggedIn, questions, Question } from 'src/state';
-import { useRouter } from 'vue-router';
-import delay from 'delay';
-
 export default defineComponent({
   name: 'MainLayout',
   components: { EssentialLink },
   setup() {
     async function getAccount(accountId: string) {
-      const response = await ky.get('account', {
+      const response = await api.get('account', {
         searchParams: {
           id: accountId,
         },
@@ -123,7 +123,7 @@ export default defineComponent({
     }
 
     async function fetchQuestions() {
-      const response = await ky.get('questions');
+      const response = await api.get('questions');
       const result = (await response.json()) as Question[];
 
       for (const question of result) {

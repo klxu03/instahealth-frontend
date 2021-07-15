@@ -6,9 +6,14 @@
     <div class="text-h3 text-center q-mt-none" style="font-weight: bold">
       Register
     </div>
-    <q-input label="Email" v-model="email" outlined />
-    <q-input label="Password" v-model="password" outlined />
-    <q-input label="Confirm Password" v-model="confirmPassword" outlined />
+    <q-input label="Email" type="email" v-model="email" outlined />
+    <q-input label="Password" type="password" v-model="password" outlined />
+    <q-input
+      label="Confirm Password"
+      type="password"
+      v-model="confirmPassword"
+      outlined
+    />
     <div class="row justify-center">
       <div class="column justify-center">I am a:</div>
       <q-radio v-model="medicalRole" val="patient" label="Patient" />
@@ -29,6 +34,7 @@ import { api } from 'src/utils';
 import ErrorMessage from 'components/ErrorMessage.vue';
 import { useRouter } from 'vue-router';
 import { isLoggedIn } from 'src/state';
+import { HTTPError } from 'ky';
 
 const doctorRoles = [
   {
@@ -100,7 +106,7 @@ export default defineComponent({
         isLoggedIn.value = true;
         await router.push('/');
       } catch (e: unknown) {
-        errorMessage.value = (e as Error).toString();
+        errorMessage.value = await (e as HTTPError).response.text();
       }
     }
 

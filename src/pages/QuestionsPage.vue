@@ -1,6 +1,12 @@
 <template>
   <q-page class="column items-center">
     <div class="text-h3 text-bold q-mt-md q-mb-sm">Recent Questions</div>
+    <q-btn
+      class="q-mb-md"
+      label="Refresh"
+      @click="fetchQuestions"
+      color="primary"
+    ></q-btn>
     <q-list class="column items-stretch" style="width: 600px">
       <template v-for="question in questions" :key="question.id">
         <q-item
@@ -43,8 +49,8 @@ import {
   mdiHospitalBox,
   mdiChevronRight,
 } from '@quasar/extras/mdi-v5';
-import { questions } from 'src/state';
-import ky from 'ky';
+import { Question, questions } from 'src/state';
+import { api } from 'src/utils';
 
 const roleToIconMap = {
   patient: mdiHelp,
@@ -64,7 +70,13 @@ export default defineComponent({
     }
 
     async function fetchQuestions() {
-      await ky.get('questions');
+      const response = await api.get('questions');
+      const result = (await response.json()) as Question[];
+
+      questions.splice(0, questions.length);
+      for (const question of result) {
+        questions.push(question);
+      }
     }
 
     void fetchQuestions();
@@ -73,6 +85,7 @@ export default defineComponent({
       questions,
       getIconForRole,
       mdiChevronRight,
+      fetchQuestions,
     };
   },
 });

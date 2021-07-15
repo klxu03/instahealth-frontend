@@ -6,8 +6,8 @@
     <div class="text-h3 text-center q-mt-none" style="font-weight: bold">
       Login
     </div>
-    <q-input label="Email" v-model="email" outlined />
-    <q-input label="Password" v-model="password" outlined />
+    <q-input label="Email" type="email" v-model="email" outlined />
+    <q-input label="Password" type="password" v-model="password" outlined />
     <q-btn label="Login" @click="login" color="primary" />
     <error-message :message="errorMessage" />
   </q-card>
@@ -19,6 +19,7 @@ import { api } from 'src/utils';
 import ErrorMessage from 'components/ErrorMessage.vue';
 import { useRouter } from 'vue-router';
 import { isLoggedIn } from 'src/state';
+import { HTTPError } from 'ky';
 
 export default defineComponent({
   components: { ErrorMessage },
@@ -43,7 +44,7 @@ export default defineComponent({
         isLoggedIn.value = true;
         await router.push('/');
       } catch (e: unknown) {
-        errorMessage.value = (e as Error).toString();
+        errorMessage.value = await (e as HTTPError).response.text();
       }
     }
 
