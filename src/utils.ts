@@ -9,11 +9,7 @@ export const api = ky.extend({
 });
 
 export async function fetchAccount(accountId: string) {
-  const response = await api.get('account', {
-    searchParams: {
-      id: accountId,
-    },
-  });
+  const response = await api.get(`account/${accountId}`);
   const result = (await response.json()) as Account;
   await delay(500);
 
