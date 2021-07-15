@@ -32,7 +32,7 @@ import { isLoggedIn } from 'src/state';
 
 const doctorRoles = [
   {
-    value: 'family-doctor',
+    value: 'familyDoctor',
     label: 'Family Doctor',
   },
   {

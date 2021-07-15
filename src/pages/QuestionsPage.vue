@@ -27,7 +27,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mdiHelp } from '@quasar/extras/mdi-v5';
+import {
+  mdiHelp,
+  mdiHeart,
+  mdiHandRight,
+  mdiEye,
+  mdiTooth,
+  mdiEarHearing,
+  mdiHospitalBox,
+} from '@quasar/extras/mdi-v5';
 
 const questions = [
   {
@@ -41,6 +49,12 @@ const questions = [
 
 const roleToIconMap = {
   patient: mdiHelp,
+  cardiologist: mdiHeart,
+  dermatologist: mdiHandRight,
+  optometrist: mdiEye,
+  dentist: mdiTooth,
+  otolarynogolist: mdiEarHearing,
+  familyDoctor: mdiHospitalBox,
 };
 
 export default defineComponent({
