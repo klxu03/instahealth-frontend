@@ -41,7 +41,6 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
 import {
-  mdiHelp,
   mdiHeart,
   mdiHandRight,
   mdiEye,
@@ -54,13 +53,12 @@ import {
 import { questions } from 'src/state';
 
 const roleToCategoryMap = {
-  patient: mdiHelp,
   heart: mdiHeart,
   skin: mdiHandRight,
   eye: mdiEye,
   teeth: mdiTooth,
   ear: mdiEarHearing,
-  family: mdiHospitalBox,
+  general: mdiHospitalBox,
 };
 
 export default defineComponent({

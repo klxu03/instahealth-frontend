@@ -2,20 +2,39 @@
   <template v-if="isQuestionLoaded">
     <q-card class="q-ma-md q-pa-md items-stretch column">
       <div class="row">
-        <div class="text-h6 text-bold q-mr-sm">Question:</div>
-        <div class="text-h6">{{ question.question }}</div>
-      </div>
-      <div class="row">
-        <div class="text-bold q-mr-xs q-mb-xs">Categories:</div>
-        <div>
-          {{
-            question.categories.length > 0
-              ? question.categories.join(', ')
-              : 'None'
-          }}
+        <div class="column">
+          <div class="row">
+            <div class="text-h6 text-bold q-mr-sm">Question:</div>
+            <div class="text-h6">{{ question.question }}</div>
+          </div>
+          <div class="row">
+            <div class="text-bold q-mr-xs q-mb-xs">Categories:</div>
+            <div>
+              {{
+                question.categories.length > 0
+                  ? question.categories.join(', ')
+                  : 'None'
+              }}
+            </div>
+            <q-btn
+              v-if="account.role !== 'patient'"
+              :icon="mdiPencil"
+              round
+              dense
+              size="6px"
+              style="margin-top: 2px"
+              class="self-start q-ml-xs"
+              color="accent"
+              @click="editCategory"
+            >
+              <q-tooltip>
+                Did our auto-classifier make a mistake with the category?
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div class="q-mb-xs" v-html="question.content" />
         </div>
       </div>
-      <div class="q-mb-xs" v-html="question.content" />
       <q-separator />
 
       <template v-for="answer in question.answers" :key="answer.id">
@@ -66,6 +85,18 @@
   <template v-else>
     <page-loading-spinner />
   </template>
+  <q-dialog v-model="isCategoryDialogVisible">
+    <q-card class="q-pa-md column">
+      <div class="text-h6 text-bold q-mb-sm">Change Question Category:</div>
+      <q-input label="New Category" outlined v-model="newCategory"></q-input>
+      <q-btn
+        class="q-mt-md self-center"
+        label="Change"
+        color="green"
+        @click="confirmCategoryChange"
+      ></q-btn>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts">
@@ -77,7 +108,7 @@ import PageLoadingSpinner from 'components/PageLoadingSpinner.vue';
 import { Notify } from 'quasar';
 import ErrorMessage from 'components/ErrorMessage.vue';
 import { HTTPError } from 'ky';
-import { mdiCash } from '@quasar/extras/mdi-v5';
+import { mdiCash, mdiPencil } from '@quasar/extras/mdi-v5';
 
 export default defineComponent({
   components: { PageLoadingSpinner, ErrorMessage },
@@ -154,6 +185,17 @@ export default defineComponent({
       alert("Sorry, but this functionality hasn't been implemented yet.");
     }
 
+    const newCategory = ref('');
+    const isCategoryDialogVisible = ref(false);
+    function editCategory() {
+      isCategoryDialogVisible.value = true;
+    }
+
+    function confirmCategoryChange() {
+      question.value.categories = [newCategory.value];
+      isCategoryDialogVisible.value = false;
+    }
+
     return {
       isQuestionLoaded,
       editor,
@@ -165,7 +207,12 @@ export default defineComponent({
       formatRole,
       account,
       mdiCash,
+      mdiPencil,
+      editCategory,
       tipDoctor,
+      isCategoryDialogVisible,
+      newCategory,
+      confirmCategoryChange,
     };
   },
 });
