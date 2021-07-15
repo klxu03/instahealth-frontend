@@ -90,10 +90,9 @@ import {
 } from '@quasar/extras/mdi-v5';
 import EssentialLink from 'components/EssentialLink.vue';
 
-import { account, Account, isLoggedIn, questions, Question } from 'src/state';
+import { isLoggedIn, questions, Question } from 'src/state';
 import { useRouter } from 'vue-router';
-import { api } from 'src/utils';
-import delay from 'delay';
+import { api, fetchAccount } from 'src/utils';
 import QuestionsList from 'src/components/QuestionsList.vue';
 
 const links = [
@@ -118,20 +117,6 @@ export default defineComponent({
   name: 'MainLayout',
   components: { EssentialLink, QuestionsList },
   setup() {
-    async function getAccount(accountId: string) {
-      const response = await api.get('account', {
-        searchParams: {
-          id: accountId,
-        },
-      });
-      const result = (await response.json()) as Account;
-      await delay(500);
-
-      account.id = result.id;
-      account.name = result.name;
-      account.role = result.role;
-    }
-
     async function fetchQuestions() {
       const response = await api.get('questions');
       const result = (await response.json()) as Question[];
@@ -143,7 +128,7 @@ export default defineComponent({
 
     const accountId = localStorage.getItem('accountId');
     if (accountId != null) {
-      void getAccount(accountId)
+      void fetchAccount(accountId)
         .then(() => {
           isLoggedIn.value = true;
         })

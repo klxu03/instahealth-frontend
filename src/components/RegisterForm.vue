@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import { api } from 'src/utils';
+import { api, fetchAccount } from 'src/utils';
 import ErrorMessage from 'components/ErrorMessage.vue';
 import { useRouter } from 'vue-router';
 import { isLoggedIn } from 'src/state';
@@ -103,6 +103,7 @@ export default defineComponent({
         });
         const result = (await response.json()) as { id: string };
         localStorage.setItem('accountId', result.id);
+        await fetchAccount(result.id);
         isLoggedIn.value = true;
         await router.push('/');
       } catch (e: unknown) {
